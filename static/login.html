@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Đăng nhập - Chợ Đồ Cũ</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#1a1209 0%,#3d2410 50%,#5c3317 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+
+.card{background:#fff;border-radius:24px;padding:40px 32px;width:100%;max-width:380px;box-shadow:0 32px 80px rgba(0,0,0,.4)}
+
+.logo{text-align:center;margin-bottom:32px}
+.logo-icon{font-size:52px;display:block;margin-bottom:10px}
+.logo-name{font-family:'Playfair Display',serif;font-weight:900;font-size:26px;color:#1a1209}
+.logo-sub{color:#8b6a4a;font-size:11px;letter-spacing:3px;margin-top:3px}
+.logo-badge{display:inline-block;background:#8b5a2b;color:#fff;font-size:9px;padding:3px 10px;border-radius:99px;letter-spacing:1px;margin-top:8px}
+
+.title{font-family:'Playfair Display',serif;font-weight:700;font-size:18px;color:#1a1209;margin-bottom:6px}
+.subtitle{color:#8b6a4a;font-size:13px;margin-bottom:24px}
+
+.field{margin-bottom:16px}
+label{display:block;font-size:11px;font-weight:600;color:#8b5a2b;letter-spacing:.8px;margin-bottom:6px}
+.input-wrap{position:relative}
+input{width:100%;border:1.5px solid #e0d5c8;border-radius:12px;padding:12px 44px 12px 14px;font-family:'DM Sans';font-size:15px;color:#1a1209;outline:none;background:#fdfaf6;transition:border-color .2s}
+input:focus{border-color:#d4a96a;background:#fff}
+.eye{position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:18px;color:#b0956a;padding:0}
+
+.error{background:#fff0f0;border:1px solid #ffcdd2;color:#c62828;border-radius:10px;padding:10px 14px;font-size:13px;margin-bottom:14px;display:none}
+.error.on{display:block}
+
+.btn{width:100%;background:#8b5a2b;color:#fff;border:none;border-radius:12px;padding:14px;font-family:'DM Sans';font-size:15px;font-weight:600;cursor:pointer;transition:background .2s;margin-top:4px;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn:hover{background:#6b3f18}
+.btn:disabled{background:#ccc;cursor:not-allowed}
+
+.spin{width:17px;height:17px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:none}
+.btn.loading .spin{display:block}
+.btn.loading .btn-text{display:none}
+
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.back{text-align:center;margin-top:18px}
+.back a{color:#8b6a4a;font-size:13px;text-decoration:none}
+.back a:hover{color:#8b5a2b}
+
+.divider{border:none;border-top:1px solid #f0e6d3;margin:20px 0}
+.hint{background:#fdf9f3;border-radius:10px;padding:12px 14px;font-size:12px;color:#8b6a4a;line-height:1.6}
+.hint b{color:#5c3317}
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="logo">
+    <span class="logo-icon">🏪</span>
+    <div class="logo-name">Chợ Đồ Cũ</div>
+    <div class="logo-sub">VINTAGE MARKET</div>
+    <span class="logo-badge">ADMIN PANEL</span>
+  </div>
+
+  <div class="title">Đăng nhập quản lý</div>
+  <div class="subtitle">Chỉ người bán mới có quyền truy cập</div>
+
+  <div class="error" id="errBox">⚠️ <span id="errMsg"></span></div>
+
+  <div class="field">
+    <label>TÊN ĐĂNG NHẬP</label>
+    <div class="input-wrap">
+      <input type="text" id="username" placeholder="Nhập tên đăng nhập" autocomplete="username" onkeydown="if(event.key==='Enter')login()"/>
+    </div>
+  </div>
+
+  <div class="field">
+    <label>MẬT KHẨU</label>
+    <div class="input-wrap">
+      <input type="password" id="password" placeholder="Nhập mật khẩu" autocomplete="current-password" onkeydown="if(event.key==='Enter')login()"/>
+      <button class="eye" onclick="togglePw()" id="eyeBtn">👁</button>
+    </div>
+  </div>
+
+  <button class="btn" id="loginBtn" onclick="login()">
+    <div class="spin"></div>
+    <span class="btn-text">🔐 Đăng nhập</span>
+  </button>
+
+  <hr class="divider"/>
+
+  <div class="hint">
+    💡 Đổi mật khẩu: mở file <b>main.py</b><br>
+    tìm dòng <b>ADMIN_PASSWORD</b> và sửa lại
+  </div>
+
+  <div class="back">
+    <a href="/">← Về trang cửa hàng</a>
+  </div>
+</div>
+
+<script>
+function togglePw() {
+  const inp = document.getElementById('password');
+  const btn = document.getElementById('eyeBtn');
+  if (inp.type === 'password') { inp.type = 'text'; btn.textContent = '🙈'; }
+  else { inp.type = 'password'; btn.textContent = '👁'; }
+}
+
+async function login() {
+  const username = document.getElementById('username').value.trim();
+  const password = document.getElementById('password').value;
+  const btn      = document.getElementById('loginBtn');
+  const errBox   = document.getElementById('errBox');
+  const errMsg   = document.getElementById('errMsg');
+
+  if (!username || !password) {
+    errMsg.textContent = 'Vui lòng nhập đầy đủ tên đăng nhập và mật khẩu';
+    errBox.classList.add('on');
+    return;
+  }
+
+  btn.classList.add('loading');
+  btn.disabled = true;
+  errBox.classList.remove('on');
+
+  try {
+    const res = await fetch('/api/login', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({username, password})
+    });
+    const data = await res.json();
+    if (data.ok) {
+      window.location.href = '/admin';
+    } else {
+      errMsg.textContent = data.message;
+      errBox.classList.add('on');
+      document.getElementById('password').value = '';
+    }
+  } catch(e) {
+    errMsg.textContent = 'Không kết nối được server. Kiểm tra Python đã chạy chưa.';
+    errBox.classList.add('on');
+  }
+
+  btn.classList.remove('loading');
+  btn.disabled = false;
+}
+
+// Focus vào ô username khi mở trang
+document.getElementById('username').focus();
+</script>
+</body>
+</html>
