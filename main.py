@@ -111,10 +111,20 @@ async def login(request: Request):
         token = secrets.token_hex(32)
         active_tokens.add(token)
         response = JSONResponse({"ok": True, "message": "Đăng nhập thành công!"})
+#        response.set_cookie(
+#            key="admin_token", value=token,
+#            httponly=True, max_age=86400 * 7, samesite="lax"
+#        )
+
         response.set_cookie(
-            key="admin_token", value=token,
-            httponly=True, max_age=86400 * 7, samesite="lax"
+            key="admin_token",
+            value=token,
+            httponly=True,
+            max_age=86400 * 7,
+            samesite="none",
+            secure=True
         )
+
         return response
     return JSONResponse(
         {"ok": False, "message": "Sai tên đăng nhập hoặc mật khẩu!"},
