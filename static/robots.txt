@@ -4,4 +4,4 @@ Disallow: /admin
 Disallow: /login
 Disallow: /api/
 
-Sitemap: https://webdocu.onrender.com
+Sitemap: https://quangchungluong-webdocu.hf.space/sitemap.xml
