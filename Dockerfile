@@ -5,5 +5,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 ENV ADMIN_USERNAME=admin
 ENV ADMIN_PASSWORD=chodocus123
+ENV PORT=7860
 EXPOSE 7860
 CMD ["python", "main.py"]
